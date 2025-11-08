@@ -1,18 +1,43 @@
-## Getting Started
+# 🎟️ EventManager – Console-Based Java Event Management System
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+### 🧩 Overview
+**EventManager** is a console-based Java application designed to simulate an online event management system.  
+It allows users to **create, manage, and join events** (such as concerts, LAN parties, and workshops) — while demonstrating how core **software design patterns** can make the system flexible, scalable, and maintainable.
 
-## Folder Structure
+This project was developed as part of a programming assignment focused on understanding and implementing **Object-Oriented Design Patterns** in Java.
 
-The workspace contains two folders by default, where:
+---
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## 🧠 Learning Goals
+- Understand what **design patterns** are and why they are used.  
+- Learn to identify where patterns fit naturally in a system.  
+- Implement key patterns such as **Singleton**, **Factory**, **Observer**, and **Decorator**.  
+- Reflect on design decisions and their impact on maintainability.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+---
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## ⚙️ Features
+### 👤 User Management
+- Users can **register** and **log in**.  
+- **Admins** can add, remove, or update user profiles.  
+- Singleton pattern ensures there is only one active `UserManager` instance controlling all users.
 
-## Dependency Management
+### 🎫 Event Administration
+- Users can **create** and **view** events.  
+- Different event types (Concert, Workshop, Conference, etc.) are created dynamically using the **Factory Pattern**.  
+- Events include title, description, date, and location.
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+### 🔔 Registration & Notifications
+- Users can **register** for events.
+- When an event changes or is cancelled, all registered users are **notified automatically** via the **Observer Pattern**.
+
+### 🌟 Event Add-ons (Decorator Pattern)
+- Events can be **decorated** with optional extras like:
+  - `VipAccess`
+  - `MealService`
+  - `BackstagePass`
+- Each decorator adds functionality and modifies the total description/price dynamically.
+
+### 📊 Reporting (Admin Only)
+- Admins can generate summaries of all events and participants.
+- Example: “Workshop: 15 participants — 3 VIP upgrades”
