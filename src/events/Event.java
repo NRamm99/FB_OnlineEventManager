@@ -59,4 +59,20 @@ public class Event {
     public List<User> getAttendees() {
         return attendees;
     }
+
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
+        notifyAttendees("The event title has been changed to: " + eventTitle);
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
+        notifyAttendees("The event description has been changed to: " + eventDescription);
+    }
+
+    public void notifyAttendees(String message) {
+        for (User attendee : attendees) {
+            attendee.addNotification(message);
+        }
+    }
 }
