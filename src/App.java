@@ -30,9 +30,10 @@ public class App {
                 Please choose an option:
                 1. Create Event
                 2. View My Events
-                3. Notifications
-                4. Logout
-                5. Exit
+                3. View All Events
+                4. Notifications
+                5. Logout
+                6. Exit
                 """, true);
         int choice = Tools.validateInt(input, "Choice");
         switch (choice) {
@@ -43,12 +44,15 @@ public class App {
                 promptViewMyEvents();
                 break;
             case 3:
-                promptViewNotifications();
+                promptViewAllEvents();
                 break;
             case 4:
-                isLoggedIn = false;
+                promptViewNotifications();
                 break;
             case 5:
+                isLoggedIn = false;
+                break;
+            case 6:
                 System.exit(0);
                 break;
             default:
@@ -62,6 +66,24 @@ public class App {
         throw new UnsupportedOperationException("Unimplemented method 'promptViewNotifications'");
     }
 
+    private static void promptViewAllEvents() {
+        Tools.printToConsole("All Events", true);
+        for (Event event : eventHandler.getEvents()) {
+            Tools.printToConsole("--------------------------------");
+            Tools.printToConsole("Event ID: " + event.getEventId());
+            Tools.printToConsole("Event Title: " + event.getEventTitle());
+            Tools.printToConsole("Event Description: " + event.getEventDescription());
+            Tools.printToConsole("Date: " + event.getDate());
+            Tools.printToConsole("Time: " + event.getTime());
+            Tools.printToConsole("Location: " + event.getLocation());
+            Tools.printToConsole("Attendees: " + event.getAttendees().size());
+            Tools.printToConsole(
+                    "Organizer: " + event.getOrganizer().getFirstName() + " " + event.getOrganizer().getLastName());
+            Tools.printToConsole("--------------------------------\n");
+        }
+        Tools.waitForUser(input);
+    }
+
     private static void promptViewMyEvents() {
         Tools.printToConsole("Events", true);
         for (Event event : eventHandler.getEvents()) {
@@ -73,7 +95,8 @@ public class App {
                 Tools.printToConsole("Time: " + event.getTime());
                 Tools.printToConsole("Location: " + event.getLocation());
                 Tools.printToConsole("Attendees: " + event.getAttendees().size());
-                Tools.printToConsole("Organizer: " + event.getOrganizer().getFirstName() + " " + event.getOrganizer().getLastName());
+                Tools.printToConsole(
+                        "Organizer: " + event.getOrganizer().getFirstName() + " " + event.getOrganizer().getLastName());
                 Tools.printToConsole("--------------------------------");
             }
         }
