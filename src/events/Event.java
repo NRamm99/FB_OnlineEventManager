@@ -62,17 +62,32 @@ public class Event {
 
     public void setEventTitle(String eventTitle) {
         this.eventTitle = eventTitle;
-        notifyAttendees("The event title has been changed to: " + eventTitle);
+        notifyAttendees("(" + eventTitle + ") The event title has been changed to: " + eventTitle);
     }
 
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
-        notifyAttendees("The event description has been changed to: " + eventDescription);
+        notifyAttendees("(" + eventTitle + ") The event description has been changed to: " + eventDescription);
     }
 
     public void notifyAttendees(String message) {
         for (User attendee : attendees) {
             attendee.addNotification(message);
         }
+    }
+
+    public void setLocation(String eventLocation) {
+        this.location = eventLocation;
+        notifyAttendees("(" + eventTitle + ") The event location has been changed to: " + eventLocation);
+    }
+
+    public void setTime(String eventTime) {
+        this.time = eventTime;
+        notifyAttendees("(" + eventTitle + ") The event time has been changed to: " + eventTime);
+    }
+
+    public void setDate(String eventDate) {
+        this.date = eventDate;
+        notifyAttendees("(" + eventTitle + ") The event date has been changed to: " + eventDate);
     }
 }

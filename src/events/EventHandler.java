@@ -28,4 +28,8 @@ public class EventHandler {
         event.getAttendees().add(user);
     }
 
+    public void unregisterForEvent(Event event, User currentUser) {
+        event.getAttendees().remove(currentUser);
+    }
+
 }

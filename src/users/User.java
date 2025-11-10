@@ -43,4 +43,8 @@ public class User implements Observer {
     public String[] getNotifications() {
         return notifications.toArray(new String[notifications.size()]);
     }
+
+    public void clearNotifications() {
+        notifications.clear();
+    }
 }

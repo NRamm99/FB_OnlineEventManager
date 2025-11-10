@@ -62,28 +62,40 @@ public class App {
     }
 
     private static void promptViewNotifications() {
-        Tools.printToConsole("Notifications", true);
-        for (String notification : currentUser.getNotifications()) {
-            Tools.printToConsole(notification);
+        Tools.printToConsole("Notifications: (" + currentUser.getNotifications().length + ")", true);
+        if (currentUser.getNotifications().length == 0) {
+            Tools.printToConsole("No notifications", true);
+            Tools.waitForUser(input);
+            return;
         }
-        Tools.waitForUser(input);
+        int notificationCount = 1;
+        for (String notification : currentUser.getNotifications()) {
+            Tools.printToConsole(notificationCount + ". " + notification);
+            notificationCount++;
+        }
+        Tools.printToConsole("""
+                    1... clear notifications
+                    2... back
+                """);
+        int choice = Tools.validateInt(input, "Choice");
+        switch (choice) {
+            case 1:
+                currentUser.clearNotifications();
+                Tools.printToConsole("Notifications cleared", true);
+                Tools.waitForUser(input);
+                break;
+            case 2:
+                break;
+            default:
+                Tools.printToConsole("Invalid choice", true);
+                Tools.waitForUser(input);
+                promptViewNotifications();
+                break;
+        }
     }
 
     private static void promptViewAllEvents() {
-        Tools.printToConsole("All Events", true);
-        for (Event event : eventHandler.getEvents()) {
-            Tools.printToConsole("--------------------------------");
-            Tools.printToConsole("Event ID: " + event.getEventId());
-            Tools.printToConsole("Event Title: " + event.getEventTitle());
-            Tools.printToConsole("Event Description: " + event.getEventDescription());
-            Tools.printToConsole("Date: " + event.getDate());
-            Tools.printToConsole("Time: " + event.getTime());
-            Tools.printToConsole("Location: " + event.getLocation());
-            Tools.printToConsole("Attendees: " + event.getAttendees().size());
-            Tools.printToConsole(
-                    "Organizer: " + event.getOrganizer().getFirstName() + " " + event.getOrganizer().getLastName());
-            Tools.printToConsole("--------------------------------\n");
-        }
+        printAllEvents();
         Tools.printToConsole("""
                 1... register for event
                 2... unregister for event
@@ -107,14 +119,53 @@ public class App {
         }
     }
 
+    private static void printAllEvents() {
+        Tools.printToConsole("All Events", true);
+        for (Event event : eventHandler.getEvents()) {
+            Tools.printToConsole("--------------------------------");
+            Tools.printToConsole("Event ID: " + event.getEventId());
+            Tools.printToConsole("Event Title: " + event.getEventTitle());
+            Tools.printToConsole("Event Description: " + event.getEventDescription());
+            Tools.printToConsole("Date: " + event.getDate());
+            Tools.printToConsole("Time: " + event.getTime());
+            Tools.printToConsole("Location: " + event.getLocation());
+            Tools.printToConsole("Attendees: " + event.getAttendees().size());
+            Tools.printToConsole(
+                    "Organizer: " + event.getOrganizer().getFirstName() + " " + event.getOrganizer().getLastName());
+            Tools.printToConsole("--------------------------------\n");
+        }
+    }
+
     private static void promptUnregisterForEvent() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'promptUnregisterForEvent'");
+        printAllEvents();
+        Tools.printToConsole("Enter event ID: ");
+        int eventId = Tools.validateInt(input, "Event ID");
+        Event event = eventHandler.getEventById(eventId);
+        if (event == null) {
+            Tools.printToConsole("Event not found");
+            Tools.waitForUser(input);
+            return;
+        }
+        eventHandler.unregisterForEvent(event, currentUser);
+        Tools.printToConsole("You are now unregistered for the event: " + event.getEventTitle(), true);
+        Tools.printToConsole("You will no longer receive notifications about the event");
+        Tools.waitForUser(input);
     }
 
     private static void promptRegisterForEvent() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'promptRegisterForEvent'");
+        printAllEvents();
+        Tools.printToConsole("Enter event ID: ");
+        int eventId = Tools.validateInt(input, "Event ID");
+        Event event = eventHandler.getEventById(eventId);
+        if (event == null) {
+            Tools.printToConsole("Event not found");
+            Tools.waitForUser(input);
+            return;
+        }
+        eventHandler.registerForEvent(event, currentUser);
+        Tools.printToConsole("You are now registered for the event: " + event.getEventTitle(), true);
+        Tools.printToConsole("You will receive notifications about the event");
+        Tools.waitForUser(input);
     }
 
     private static void promptViewMyEvents() {
@@ -139,7 +190,7 @@ public class App {
         }
     }
 
-    private static void printMyEvents(User currentUser2) {
+    private static void printMyEvents(User currentUser) {
         Tools.printToConsole("Events", true);
         for (Event event : eventHandler.getEvents()) {
             if (event.getOrganizer().equals(currentUser)) {
@@ -154,6 +205,7 @@ public class App {
                         "Organizer: " + event.getOrganizer().getFirstName() + " " + event.getOrganizer().getLastName());
                 Tools.printToConsole("--------------------------------");
             }
+        }
     }
 
     private static void promptEditEvent() {
@@ -166,7 +218,94 @@ public class App {
             Tools.waitForUser(input);
             return;
         }
+        Tools.clearConsole();
+        printEvent(event);
+        Tools.printToConsole("""
+                1... edit title
+                2... edit description
+                3... edit date
+                4... edit time
+                5... edit location
+                6... back
+                """);
+        int choice = Tools.validateInt(input, "Choice");
+        switch (choice) {
+            case 1:
+                promptEditTitle(event);
+                break;
+            case 2:
+                promptEditDescription(event);
+                break;
+            case 3:
+                promptEditDate(event);
+                break;
+            case 4:
+                promptEditTime(event);
+                break;
+            case 5:
+                promptEditLocation(event);
+                break;
+            case 6:
+                break;
+            default:
+                Tools.printToConsole("Invalid choice", true);
+                promptEditEvent();
+                break;
+        }
+    }
+
+    private static void promptEditDescription(Event event) {
+        Tools.printToConsole("Enter new event description: ");
+        String eventDescription = Tools.validateName(input, "Event Description");
+        event.setEventDescription(eventDescription);
+        Tools.printToConsole("Event description updated successfully", true);
+        Tools.waitForUser(input);
+    }
+
+    private static void promptEditDate(Event event) {
+        Tools.printToConsole("Enter new event date: ");
+        String eventDate = Tools.validateDate(input, "Event Date");
+        event.setDate(eventDate);
+        Tools.printToConsole("Event date updated successfully", true);
+        Tools.waitForUser(input);
+    }
+
+    private static void promptEditTime(Event event) {
+        Tools.printToConsole("Enter new event time: ");
+        String eventTime = Tools.validateTime(input, "Event Time");
+        event.setTime(eventTime);
+        Tools.printToConsole("Event time updated successfully", true);
+        Tools.waitForUser(input);
+    }
+
+    private static void promptEditLocation(Event event) {
+        Tools.printToConsole("Enter new event location: ");
+        String eventLocation = Tools.validateName(input, "Event Location");
+        event.setLocation(eventLocation);
+        Tools.printToConsole("Event location updated successfully", true);
+        Tools.waitForUser(input);
+    }
+
+    private static void promptEditTitle(Event event) {
         Tools.printToConsole("Enter new event title: ");
+        String eventTitle = Tools.validateName(input, "Event Title");
+        event.setEventTitle(eventTitle);
+        Tools.printToConsole("Event title updated successfully", true);
+        Tools.waitForUser(input);
+    }
+
+    private static void printEvent(Event event) {
+        Tools.printToConsole("--------------------------------");
+        Tools.printToConsole("Event ID: " + event.getEventId());
+        Tools.printToConsole("Event Title: " + event.getEventTitle());
+        Tools.printToConsole("Event Description: " + event.getEventDescription());
+        Tools.printToConsole("Date: " + event.getDate());
+        Tools.printToConsole("Time: " + event.getTime());
+        Tools.printToConsole("Location: " + event.getLocation());
+        Tools.printToConsole("Attendees: " + event.getAttendees().size());
+        Tools.printToConsole(
+                "Organizer: " + event.getOrganizer().getFirstName() + " " + event.getOrganizer().getLastName());
+        Tools.printToConsole("--------------------------------");
     }
 
     private static void promptCreateEvent() {
