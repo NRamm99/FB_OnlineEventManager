@@ -1,4 +1,5 @@
 package users;
+
 import java.util.ArrayList;
 
 public class AccountHandler {
@@ -6,8 +7,8 @@ public class AccountHandler {
 
     public AccountHandler() {
         this.users = new ArrayList<>();
-        addUser(new User("admin", "admin", "Admin", "Admin"));
-        addUser(new User("brugernavn", "kode123", "Nichlas", "Ramm"));
+        addUser(new User("admin", "admin", "Admin", "Bruger"));
+        addUser(new User("Nichlas", "kode", "Nichlas", "Ramm"));
     }
 
     private void addUser(User user) {
@@ -24,10 +25,7 @@ public class AccountHandler {
     }
 
     public boolean login(User user, String password) {
-        if (user.getPassword().equals(password)) {
-            return true;
-        }
-        return false;
+        return user.getPassword().equals(password);
     }
 
     public void register(String username, String password, String firstName, String lastName) {

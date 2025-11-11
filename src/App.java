@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 import events.Event;
+import events.EventFactory;
 import events.EventHandler;
 import users.AccountHandler;
 import users.User;
@@ -122,17 +123,7 @@ public class App {
     private static void printAllEvents() {
         Tools.printToConsole("All Events", true);
         for (Event event : eventHandler.getEvents()) {
-            Tools.printToConsole("--------------------------------");
-            Tools.printToConsole("Event ID: " + event.getEventId());
-            Tools.printToConsole("Event Title: " + event.getEventTitle());
-            Tools.printToConsole("Event Description: " + event.getEventDescription());
-            Tools.printToConsole("Date: " + event.getDate());
-            Tools.printToConsole("Time: " + event.getTime());
-            Tools.printToConsole("Location: " + event.getLocation());
-            Tools.printToConsole("Attendees: " + event.getAttendees().size());
-            Tools.printToConsole(
-                    "Organizer: " + event.getOrganizer().getFirstName() + " " + event.getOrganizer().getLastName());
-            Tools.printToConsole("--------------------------------\n");
+            printEvent(event);
         }
     }
 
@@ -194,16 +185,7 @@ public class App {
         Tools.printToConsole("Events", true);
         for (Event event : eventHandler.getEvents()) {
             if (event.getOrganizer().equals(currentUser)) {
-                Tools.printToConsole("Event ID: " + event.getEventId());
-                Tools.printToConsole("Event Title: " + event.getEventTitle());
-                Tools.printToConsole("Event Description: " + event.getEventDescription());
-                Tools.printToConsole("Date: " + event.getDate());
-                Tools.printToConsole("Time: " + event.getTime());
-                Tools.printToConsole("Location: " + event.getLocation());
-                Tools.printToConsole("Attendees: " + event.getAttendees().size());
-                Tools.printToConsole(
-                        "Organizer: " + event.getOrganizer().getFirstName() + " " + event.getOrganizer().getLastName());
-                Tools.printToConsole("--------------------------------");
+                printEvent(event);
             }
         }
     }
@@ -295,7 +277,7 @@ public class App {
     }
 
     private static void printEvent(Event event) {
-        Tools.printToConsole("--------------------------------");
+        Tools.printToConsole("----------- " + event.getEventType().toUpperCase() + " -----------");
         Tools.printToConsole("Event ID: " + event.getEventId());
         Tools.printToConsole("Event Title: " + event.getEventTitle());
         Tools.printToConsole("Event Description: " + event.getEventDescription());
@@ -310,12 +292,59 @@ public class App {
 
     private static void promptCreateEvent() {
         Tools.printToConsole("Create Event", true);
-        String eventTitle = Tools.validateName(input, "Event Title");
-        String eventDescription = Tools.validateName(input, "Event Description");
+        Tools.printToConsole("""
+                1... concert
+                2... workshop
+                3... conference
+                4... party
+                5... lan party
+                6... hackathon
+                7... game night
+                8... movie night
+                9... board game night
+                """);
+        int choice = Tools.validateInt(input, "Choice");
+        String eventType = "";
+        switch (choice) {
+            case 1:
+                eventType = "concert";
+                break;
+            case 2:
+                eventType = "workshop";
+                break;
+            case 3:
+                eventType = "conference";
+                break;
+            case 4:
+                eventType = "party";
+                break;
+            case 5:
+                eventType = "lan party";
+                break;
+            case 6:
+                eventType = "hackathon";
+                break;
+            case 7:
+                eventType = "game night";
+                break;
+            case 8:
+                eventType = "movie night";
+                break;
+            case 9:
+                eventType = "board game night";
+                break;
+            default:
+                Tools.printToConsole("Invalid choice", true);
+                promptCreateEvent();
+                break;
+        }
+        String eventTitle = Tools.validateString(input, "Event Title");
+        String eventDescription = Tools.validateString(input, "Event Description");
         String date = Tools.validateDate(input, "Date");
         String time = Tools.validateTime(input, "Time");
-        String location = Tools.validateName(input, "Location");
-        eventHandler.addEvent(new Event(eventTitle, eventDescription, date, time, location, currentUser));
+        String location = Tools.validateString(input, "Location");
+        eventHandler.addEvent(
+                EventFactory.createEvent(eventType, eventTitle, eventDescription, date, time, location, currentUser));
         Tools.printToConsole("Event created successfully", true);
         Tools.waitForUser(input);
     }

@@ -100,4 +100,16 @@ public class Tools {
             }
         }
     }
+
+    public static String validateString(Scanner input, String message) {
+        while (true) {
+            System.out.print(message + ": ");
+            String string = input.nextLine();
+            if (string.matches("^[A-Za-zÆØÅæøå\\s]+$")) {
+                return string;
+            } else {
+                Tools.printToConsole("❌ Invalid string. Please enter a valid string.");
+            }
+        }
+    }
 }
