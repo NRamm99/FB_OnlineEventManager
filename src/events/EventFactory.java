@@ -7,7 +7,7 @@ public class EventFactory {
     private EventFactory() {
     }
 
-    public static Event createEvent(String eventType, String eventTitle, String eventDescription, String date,
+    public static BaseEvent createEvent(String eventType, String eventTitle, String eventDescription, String date,
             String time, String location, User organizer) {
         switch (eventType) {
             case "concert":

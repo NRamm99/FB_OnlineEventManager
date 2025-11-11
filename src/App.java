@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-import events.Event;
+import events.BaseEvent;
 import events.EventFactory;
 import events.EventHandler;
 import users.AccountHandler;
@@ -137,7 +137,7 @@ public class App {
 
     private static void promptViewEventsByType(String eventType) {
         Tools.printToConsole("Events by type: " + eventType, true);
-        for (Event event : eventHandler.getEvents()) {
+        for (BaseEvent event : eventHandler.getEvents()) {
             if (event.getEventType().equalsIgnoreCase(eventType)) {
                 printEvent(event);
             } else {
@@ -229,7 +229,7 @@ public class App {
 
     private static void printAllEvents() {
         Tools.printToConsole("All Events", true);
-        for (Event event : eventHandler.getEvents()) {
+        for (BaseEvent event : eventHandler.getEvents()) {
             printEvent(event);
         }
     }
@@ -238,7 +238,7 @@ public class App {
         printAllEvents();
         Tools.printToConsole("Enter event ID: ");
         int eventId = Tools.validateInt(input, "Event ID");
-        Event event = eventHandler.getEventById(eventId);
+        BaseEvent event = eventHandler.getEventById(eventId);
         if (event == null) {
             Tools.printToConsole("Event not found");
             Tools.waitForUser(input);
@@ -254,7 +254,7 @@ public class App {
         printAllEvents();
         Tools.printToConsole("Enter event ID: ");
         int eventId = Tools.validateInt(input, "Event ID");
-        Event event = eventHandler.getEventById(eventId);
+        BaseEvent event = eventHandler.getEventById(eventId);
         if (event == null) {
             Tools.printToConsole("Event not found");
             Tools.waitForUser(input);
@@ -290,7 +290,7 @@ public class App {
 
     private static void printMyEvents(User currentUser) {
         Tools.printToConsole("Events", true);
-        for (Event event : eventHandler.getEvents()) {
+        for (BaseEvent event : eventHandler.getEvents()) {
             if (event.getOrganizer().equals(currentUser)) {
                 printEvent(event);
             }
@@ -301,7 +301,7 @@ public class App {
 
         Tools.printToConsole("Enter event ID: ");
         int eventId = Tools.validateInt(input, "Event ID");
-        Event event = eventHandler.getEventById(eventId);
+        BaseEvent event = eventHandler.getEventById(eventId);
         if (event == null) {
             Tools.printToConsole("Event not found");
             Tools.waitForUser(input);
@@ -343,7 +343,7 @@ public class App {
         }
     }
 
-    private static void promptEditDescription(Event event) {
+    private static void promptEditDescription(BaseEvent event) {
         Tools.printToConsole("Enter new event description: ");
         String eventDescription = Tools.validateString(input, "Event Description");
         event.setEventDescription(eventDescription);
@@ -351,7 +351,7 @@ public class App {
         Tools.waitForUser(input);
     }
 
-    private static void promptEditDate(Event event) {
+    private static void promptEditDate(BaseEvent event) {
         Tools.printToConsole("Enter new event date: ");
         String eventDate = Tools.validateDate(input, "Event Date");
         event.setDate(eventDate);
@@ -359,7 +359,7 @@ public class App {
         Tools.waitForUser(input);
     }
 
-    private static void promptEditTime(Event event) {
+    private static void promptEditTime(BaseEvent event) {
         Tools.printToConsole("Enter new event time: ");
         String eventTime = Tools.validateTime(input, "Event Time");
         event.setTime(eventTime);
@@ -367,7 +367,7 @@ public class App {
         Tools.waitForUser(input);
     }
 
-    private static void promptEditLocation(Event event) {
+    private static void promptEditLocation(BaseEvent event) {
         Tools.printToConsole("Enter new event location: ");
         String eventLocation = Tools.validateName(input, "Event Location");
         event.setLocation(eventLocation);
@@ -375,7 +375,7 @@ public class App {
         Tools.waitForUser(input);
     }
 
-    private static void promptEditTitle(Event event) {
+    private static void promptEditTitle(BaseEvent event) {
         Tools.printToConsole("Enter new event title: ");
         String eventTitle = Tools.validateName(input, "Event Title");
         event.setEventTitle(eventTitle);
@@ -383,7 +383,7 @@ public class App {
         Tools.waitForUser(input);
     }
 
-    private static void printEvent(Event event) {
+    private static void printEvent(BaseEvent event) {
         Tools.printToConsole("----------- " + event.getEventType().toUpperCase() + " -----------");
         Tools.printToConsole("Event ID: " + event.getEventId());
         Tools.printToConsole("Event Title: " + event.getEventTitle());

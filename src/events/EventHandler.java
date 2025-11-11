@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import users.User;
 
 public class EventHandler {
-    private ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<BaseEvent> events = new ArrayList<>();
 
-    public void addEvent(Event event) {
+    public void addEvent(BaseEvent event) {
         events.add(event);
         registerForEvent(event, event.getOrganizer());
     }
@@ -16,19 +16,19 @@ public class EventHandler {
         events.remove(event);
     }
 
-    public Event getEventById(int id) {
+    public BaseEvent getEventById(int id) {
         return events.get(id);
     }
 
-    public Event[] getEvents() {
-        return events.toArray(new Event[0]);
+    public BaseEvent[] getEvents() {
+        return events.toArray(new BaseEvent[0]);
     }
 
-    public void registerForEvent(Event event, User user) {
+    public void registerForEvent(BaseEvent event, User user) {
         event.getAttendees().add(user);
     }
 
-    public void unregisterForEvent(Event event, User currentUser) {
+    public void unregisterForEvent(BaseEvent event, User currentUser) {
         event.getAttendees().remove(currentUser);
     }
 
