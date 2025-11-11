@@ -72,7 +72,7 @@ public class App {
                 promptViewMyEvents();
                 break;
             case 2:
-                printAllEvents();
+                promptViewAllEvents();
                 Tools.waitForUser(input);
                 break;
             case 3:
@@ -128,6 +128,10 @@ public class App {
             case 9:
                 promptViewEventsByType("board game night");
                 break;
+            default:
+                Tools.printToConsole("Invalid choice", true);
+                promptViewEventsByType();
+                break;
         }
     }
 
@@ -141,6 +145,26 @@ public class App {
                 Tools.waitForUser(input);
                 return;
             }
+        }
+        Tools.printToConsole("""
+                1... register for event
+                2... unregister for event
+                3... back
+                """);
+        int choice = Tools.validateInt(input, "Choice");
+        switch (choice) {
+            case 1:
+                promptRegisterForEvent();
+                break;
+            case 2:
+                promptUnregisterForEvent();
+                break;
+            case 3:
+                break;
+            default:
+                Tools.printToConsole("Invalid choice", true);
+                promptViewEventsByType(eventType);
+                break;
         }
         Tools.waitForUser(input);
     }
