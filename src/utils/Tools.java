@@ -1,5 +1,8 @@
 package utils;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Tools {
@@ -81,11 +84,13 @@ public class Tools {
         while (true) {
             System.out.print(message + ": ");
             String date = input.nextLine();
-            if (date.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-                return date;
-            } else {
-                Tools.printToConsole("❌ Invalid date. Please enter a valid date in the format YYYY-MM-DD.");
+            try {
+                LocalDate parsed = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                return parsed.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            } catch (DateTimeParseException e) {
+                Tools.printToConsole("❌ Invalid date. Please enter a valid date in the format DD/MM/YYYY.");
             }
+
         }
     }
 

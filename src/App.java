@@ -30,11 +30,10 @@ public class App {
                 Main Menu
                 Please choose an option:
                 1. Create Event
-                2. View My Events
-                3. View All Events
-                4. Notifications
-                5. Logout
-                6. Exit
+                2. View Events
+                3. Notifications
+                4. Logout
+                5. Exit
                 """, true);
         int choice = Tools.validateInt(input, "Choice");
         switch (choice) {
@@ -42,24 +41,108 @@ public class App {
                 promptCreateEvent();
                 break;
             case 2:
-                promptViewMyEvents();
+                promptViewEvents();
                 break;
             case 3:
-                promptViewAllEvents();
-                break;
-            case 4:
                 promptViewNotifications();
                 break;
-            case 5:
+            case 4:
                 isLoggedIn = false;
                 break;
-            case 6:
+            case 5:
                 System.exit(0);
                 break;
             default:
                 Tools.printToConsole("Invalid choice", true);
                 promptMainMenu();
+                break;
         }
+    }
+
+    private static void promptViewEvents() {
+        Tools.printToConsole("""
+                1... View My Events
+                2... View All Events
+                3... View Events By Type
+                4... back
+                """);
+        int choice = Tools.validateInt(input, "Choice");
+        switch (choice) {
+            case 1:
+                promptViewMyEvents();
+                break;
+            case 2:
+                printAllEvents();
+                Tools.waitForUser(input);
+                break;
+            case 3:
+                promptViewEventsByType();
+                break;
+            case 4:
+                break;
+            default:
+                Tools.printToConsole("Invalid choice", true);
+                promptViewEvents();
+                break;
+        }
+    }
+
+    private static void promptViewEventsByType() {
+        Tools.printToConsole("""
+                1... concert
+                2... workshop
+                3... conference
+                4... party
+                5... lan party
+                6... hackathon
+                7... game night
+                8... movie night
+                9... board game night
+                """, true);
+        int choice = Tools.validateInt(input, "Choice");
+        switch (choice) {
+            case 1:
+                promptViewEventsByType("concert");
+                break;
+            case 2:
+                promptViewEventsByType("workshop");
+                break;
+            case 3:
+                promptViewEventsByType("conference");
+                break;
+            case 4:
+                promptViewEventsByType("party");
+                break;
+            case 5:
+                promptViewEventsByType("lan party");
+                break;
+            case 6:
+                promptViewEventsByType("hackathon");
+                break;
+            case 7:
+                promptViewEventsByType("game night");
+                break;
+            case 8:
+                promptViewEventsByType("movie night");
+                break;
+            case 9:
+                promptViewEventsByType("board game night");
+                break;
+        }
+    }
+
+    private static void promptViewEventsByType(String eventType) {
+        Tools.printToConsole("Events by type: " + eventType, true);
+        for (Event event : eventHandler.getEvents()) {
+            if (event.getEventType().equalsIgnoreCase(eventType)) {
+                printEvent(event);
+            } else {
+                Tools.printToConsole("No events found for type: " + eventType);
+                Tools.waitForUser(input);
+                return;
+            }
+        }
+        Tools.waitForUser(input);
     }
 
     private static void promptViewNotifications() {
@@ -238,7 +321,7 @@ public class App {
 
     private static void promptEditDescription(Event event) {
         Tools.printToConsole("Enter new event description: ");
-        String eventDescription = Tools.validateName(input, "Event Description");
+        String eventDescription = Tools.validateString(input, "Event Description");
         event.setEventDescription(eventDescription);
         Tools.printToConsole("Event description updated successfully", true);
         Tools.waitForUser(input);
